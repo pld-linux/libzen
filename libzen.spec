@@ -7,9 +7,12 @@ Group:		Libraries
 URL:		http://zenlib.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/zenlib/ZenLib%20-%20Sources/%{version}/%{name}_%{version}.tar.bz2
 # Source0-md5:	40942f2ecf470bfe1a28ac75c55096c5
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	dos2unix
 BuildRequires:	doxygen
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
