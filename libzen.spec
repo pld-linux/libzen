@@ -1,10 +1,10 @@
-Summary:	Shared library for libmediainfo and medianfo*
+Summary:	Shared library for libmediainfo and mediainfo*
 Name:		libzen
 Version:	0.4.11
 Release:	1
 License:	BSD
 Group:		Libraries
-URL:		http://zenlib.sourceforge.net/
+URL:		http://mediainfo.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/zenlib/ZenLib%20-%20Sources/%{version}/%{name}_%{version}.tar.bz2
 # Source0-md5:	23d779f4b275c928d09fb687334993a0
 BuildRequires:	autoconf
@@ -16,7 +16,7 @@ BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Shared library for libmediainfo and medianfo-*.
+Shared library for libmediainfo and mediainfo-*.
 
 %package -n libzen-devel
 Summary:	Include files and mandatory libraries for development
@@ -36,7 +36,7 @@ Static libzen library.
 
 %prep
 %setup -q -n ZenLib
-dos2unix     *.txt Source/Doc/*.html
+dos2unix *.txt Source/Doc/*.html
 chmod 644 *.txt Source/Doc/*.html
 
 %build
@@ -56,7 +56,6 @@ cd Project/GNU/Library
 	%configure \
 	--enable-shared \
 
-
 	%{__make} clean
 	%{__make}
 cd ../../..
@@ -69,19 +68,18 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 # Zenlib headers and ZenLib-config
-install -dm 755 $RPM_BUILD_ROOT%{_includedir}/ZenLib
-
-install Source/ZenLib/*.h 	$RPM_BUILD_ROOT%{_includedir}/ZenLib
+install -d $RPM_BUILD_ROOT%{_includedir}/ZenLib
+cp -a Source/ZenLib/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib
 
 for i in Base64 HTTP_Client Format/Html Format/Http; do
-	install -dm 755 $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
-	install -m 644 Source/ZenLib/$i/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
+	install -d $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
+	cp -a Source/ZenLib/$i/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
 done
 
 %{__sed} -i -e 's|Version: |Version: %{version}|g' Project/GNU/Library/libzen.pc
 
-install -dm 755 $RPM_BUILD_ROOT%{_libdir}/pkgconfig
-install Project/GNU/Library/libzen.pc $RPM_BUILD_ROOT%{_libdir}/pkgconfig
+install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
+cp -a Project/GNU/Library/libzen.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
