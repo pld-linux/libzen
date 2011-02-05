@@ -18,12 +18,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Shared library for libmediainfo and mediainfo-*.
 
-%package -n libzen-devel
+%package devel
 Summary:	Include files and mandatory libraries for development
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
-%description -n libzen-devel
+%description devel
 Include files and mandatory libraries for development.
 
 %package static
