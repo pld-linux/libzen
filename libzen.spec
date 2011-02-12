@@ -1,12 +1,12 @@
 Summary:	Shared library for libmediainfo and mediainfo*
 Name:		libzen
-Version:	0.4.15
+Version:	0.4.17
 Release:	1
 License:	BSD
 Group:		Libraries
 URL:		http://mediainfo.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/zenlib/ZenLib%20-%20Sources/%{version}/%{name}_%{version}.tar.bz2
-# Source0-md5:	1333f304742ec4fd05caf3db73dc3c18
+# Source0-md5:	143208aeaeefdae19b525053df2b0cfe
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	dos2unix
