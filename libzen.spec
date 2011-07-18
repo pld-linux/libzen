@@ -1,7 +1,7 @@
 Summary:	Shared library for libmediainfo and mediainfo*
 Name:		libzen
 Version:	0.4.20
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/project/zenlib/ZenLib%20-%20Sources/%{version}/%{name}_%{version}.tar.bz2
@@ -75,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_includedir}/ZenLib
 cp -a Source/ZenLib/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib
 
-for i in Base64 HTTP_Client Format/Html Format/Http; do
+for i in Base64 HTTP_Client Format/Html Format/Http TinyXml; do
 	install -d $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
 	cp -a Source/ZenLib/$i/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
 done
