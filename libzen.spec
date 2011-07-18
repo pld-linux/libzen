@@ -1,18 +1,20 @@
 Summary:	Shared library for libmediainfo and mediainfo*
 Name:		libzen
-Version:	0.4.19
+Version:	0.4.20
 Release:	1
 License:	BSD
 Group:		Libraries
-URL:		http://mediainfo.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/zenlib/ZenLib%20-%20Sources/%{version}/%{name}_%{version}.tar.bz2
-# Source0-md5:	0deabb701564f2e616a7ee6dd71599a1
+# Source0-md5:	8211cc2ca8500c6af14600363be064d5
+Patch0:		%{name}-include.patch
+URL:		http://mediainfo.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	dos2unix
 BuildRequires:	doxygen
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+BuildRequires:	rpmbuild(macros) >= 1.566
+BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -36,8 +38,10 @@ Static libzen library.
 
 %prep
 %setup -q -n ZenLib
-dos2unix *.txt Source/Doc/*.html
+%undos Source/ZenLib/*.h
+%undos *.txt Source/Doc/*.html
 chmod 644 *.txt Source/Doc/*.html
+%patch0 -p1
 
 %build
 export CFLAGS="%{rpmcflags}"
