@@ -1,40 +1,58 @@
-Summary:	Shared library for libmediainfo and mediainfo*
+Summary:	ZenLib C++ utility library
+Summary(pl.UTF-8):	ZenLib - biblioteka narzędziowa C++
 Name:		libzen
 Version:	0.4.28
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	http://downloads.sourceforge.net/project/zenlib/ZenLib%20-%20Sources/%{version}/%{name}_%{version}.tar.bz2
+Source0:	http://downloads.sourceforge.net/zenlib/%{name}_%{version}.tar.bz2
 # Source0-md5:	f09e519b71e61a7226ffefe55d00eadf
 Patch0:		%{name}-include.patch
-URL:		http://mediainfo.sourceforge.net/
-BuildRequires:	autoconf
-BuildRequires:	automake
+URL:		http://sourceforge.net/projects/zenlib/
+BuildRequires:	autoconf >= 2.50
+BuildRequires:	automake >= 1:1.11
 BuildRequires:	doxygen
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:1.5
 BuildRequires:	rpmbuild(macros) >= 1.566
 BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Shared library for libmediainfo and mediainfo-*.
+ZenLib is a C++ utility library. It includes classes for handling
+strings, configuration, bit streams, threading, translation, and
+cross-platform operating system functions.
+
+%description -l pl.UTF-8
+ZenLib to biblioteka narzędziowa C++. Zawiera klasy do obsługi
+łańcuchów znaków, konfiguracji, strumieni bitowych, wątków,
+tłumaczeń oraz wieloplatformowe funkcji dotyczące systemu
+operacyjnego.
 
 %package devel
-Summary:	Include files and mandatory libraries for development
+Summary:	Header files for ZenLib library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki ZenLib
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libstdc++-devel
 
 %description devel
-Include files and mandatory libraries for development.
+Header files for ZenLib library.
+
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki ZenLib.
 
 %package static
-Summary:	Static libzen library
+Summary:	Static ZenLib library
+Summary(pl.UTF-8):	Statyczna biblioteka ZenLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static libzen library.
+Static ZenLib library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka ZenLib.
 
 %prep
 %setup -q -n ZenLib
@@ -44,31 +62,26 @@ chmod 644 *.txt Source/Doc/*.html
 %patch0 -p1
 
 %build
-export CFLAGS="%{rpmcflags}"
-export CPPFLAGS="%{rpmcppflags}"
-export CXXFLAGS="%{rpmcxxflags}"
-
-cd Source/Doc
-	doxygen Doxyfile
-cd ../..
-
-cp Source/Doc/*.html ./
+#export CFLAGS="%{rpmcflags}"
+#export CPPFLAGS="%{rpmcppflags}"
+#export CXXFLAGS="%{rpmcxxflags}"
 
 cd Project/GNU/Library
-	chmod +x autogen
-	./autogen
-	%configure \
-	--enable-shared \
-
-	%{__make} clean
-	%{__make}
-cd ../../..
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__automake}
+%configure \
+	--enable-shared
+%{__make} clean
+%{__make}
+cd ../../../Source/Doc
+doxygen Doxyfile
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} -C Project/GNU/Library \
-	install-strip \
+%{__make} -C Project/GNU/Library install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 # Zenlib headers and ZenLib-config
@@ -80,7 +93,7 @@ for i in HTTP_Client Format/Html Format/Http; do
 	cp -a Source/ZenLib/$i/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
 done
 
-%{__sed} -i -e 's|Version: |Version: %{version}|g' Project/GNU/Library/libzen.pc
+%{__sed} -i -e 's|Version: .*|Version: %{version}|g' Project/GNU/Library/libzen.pc
 
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
 cp -a Project/GNU/Library/libzen.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
@@ -88,24 +101,24 @@ cp -a Project/GNU/Library/libzen.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
 %doc History.txt License.txt ReadMe.txt
-%attr(755,root,root) %{_libdir}/libzen.so.*
+%attr(755,root,root) %{_libdir}/libzen.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libzen.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%doc Documentation.html
-%doc Doc/*
-%dir %{_includedir}/ZenLib
+# Documentation.html expects Doc/index.html
+%doc Source/Doc/Documentation.html Doc
 %attr(755,root,root) %{_bindir}/libzen-config
-%{_includedir}/ZenLib/*
-%{_libdir}/libzen.la
 %attr(755,root,root) %{_libdir}/libzen.so
-%{_pkgconfigdir}/*.pc
+%{_libdir}/libzen.la
+%{_includedir}/ZenLib
+%{_pkgconfigdir}/libzen.pc
 
 %files static
 %defattr(644,root,root,755)
