@@ -62,10 +62,6 @@ chmod 644 *.txt Source/Doc/*.html
 %patch0 -p1
 
 %build
-#export CFLAGS="%{rpmcflags}"
-#export CPPFLAGS="%{rpmcppflags}"
-#export CXXFLAGS="%{rpmcxxflags}"
-
 cd Project/GNU/Library
 %{__libtoolize}
 %{__aclocal}
