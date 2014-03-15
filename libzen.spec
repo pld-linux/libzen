@@ -80,19 +80,11 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C Project/GNU/Library install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# Zenlib headers and ZenLib-config
-install -d $RPM_BUILD_ROOT%{_includedir}/ZenLib
-cp -a Source/ZenLib/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib
+# file omitted by build system
+cp -p Source/ZenLib/BitStream_Fast.h $RPM_BUILD_ROOT%{_includedir}/ZenLib
 
-for i in HTTP_Client Format/Html Format/Http; do
-	install -d $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
-	cp -a Source/ZenLib/$i/*.h $RPM_BUILD_ROOT%{_includedir}/ZenLib/$i
-done
-
-%{__sed} -i -e 's|Version: .*|Version: %{version}|g' Project/GNU/Library/libzen.pc
-
-install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
-cp -a Project/GNU/Library/libzen.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
+# fix Version tag (0.4.29 contains 0.4.25 as PROJECT_VERSION)
+%{__sed} -i -e 's|Version: .*|Version: %{version}|g' $RPM_BUILD_ROOT%{_pkgconfigdir}/libzen.pc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
