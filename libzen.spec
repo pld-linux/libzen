@@ -1,21 +1,27 @@
+#
+# Conditional build:
+%bcond_without	apidocs		# API documentation (doxygen generated)
+%bcond_without	static_libs	# static library
+
 Summary:	ZenLib C++ utility library
 Summary(pl.UTF-8):	ZenLib - biblioteka narzędziowa C++
 Name:		libzen
-Version:	0.4.33
+Version:	0.4.35
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	https://mediaarea.net/download/source/libzen/%{version}/%{name}_%{version}.tar.bz2
-# Source0-md5:	cb89f58388acbe2b77d4ef69294bda67
+Source0:	https://mediaarea.net/download/source/libzen/%{version}/%{name}_%{version}.tar.xz
+# Source0-md5:	bafc99ffdb8f5af8a4d159e7fd6640fa
 Patch0:		%{name}-include.patch
-URL:		http://sourceforge.net/projects/zenlib/
+URL:		https://github.com/MediaArea/ZenLib
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
-BuildRequires:	doxygen
+%{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	rpmbuild(macros) >= 1.566
-BuildRequires:	sed >= 4.0
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -53,6 +59,17 @@ Static ZenLib library.
 %description static -l pl.UTF-8
 Statyczna biblioteka ZenLib.
 
+%package apidocs
+Summary:	API documentation for ZenLib library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki ZenLib
+Group:		Documentation
+
+%description apidocs
+API documentation for ZenLib library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki ZenLib.
+
 %prep
 %setup -q -n ZenLib
 %undos Source/ZenLib/*.h
@@ -67,23 +84,20 @@ cd Project/GNU/Library
 %{__autoconf}
 %{__automake}
 %configure \
-	--enable-shared
+	%{?with_static_libs:--enable-static}
 %{__make} clean
 %{__make}
+
+%if %{with apidocs}
 cd ../../../Source/Doc
 doxygen Doxyfile
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C Project/GNU/Library install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-# file omitted by build system
-cp -p Source/ZenLib/BitStream_Fast.h $RPM_BUILD_ROOT%{_includedir}/ZenLib
-
-# fix Version tag (0.4.29 contains 0.4.25 as PROJECT_VERSION)
-%{__sed} -i -e 's|Version: .*|Version: %{version}|g' $RPM_BUILD_ROOT%{_pkgconfigdir}/libzen.pc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -93,20 +107,26 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc History.txt License.txt ReadMe.txt
+%doc History.txt License.txt README.md
 %attr(755,root,root) %{_libdir}/libzen.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libzen.so.0
 
 %files devel
 %defattr(644,root,root,755)
-# Documentation.html expects Doc/index.html
-%doc Source/Doc/Documentation.html Doc
-%attr(755,root,root) %{_bindir}/libzen-config
 %attr(755,root,root) %{_libdir}/libzen.so
 %{_libdir}/libzen.la
 %{_includedir}/ZenLib
 %{_pkgconfigdir}/libzen.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libzen.a
+%endif
+
+%if %{with apidocs}
+%files apidocs
+%defattr(644,root,root,755)
+# Documentation.html expects Doc/index.html
+%doc Source/Doc/Documentation.html Doc
+%endif
