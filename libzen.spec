@@ -6,12 +6,12 @@
 Summary:	ZenLib C++ utility library
 Summary(pl.UTF-8):	ZenLib - biblioteka narzędziowa C++
 Name:		libzen
-Version:	0.4.35
+Version:	0.4.37
 Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://mediaarea.net/download/source/libzen/%{version}/%{name}_%{version}.tar.xz
-# Source0-md5:	bafc99ffdb8f5af8a4d159e7fd6640fa
+# Source0-md5:	c2538d08a8ba49790a7e0768d19693ff
 Patch0:		%{name}-include.patch
 URL:		https://github.com/MediaArea/ZenLib
 BuildRequires:	autoconf >= 2.50
