@@ -6,12 +6,12 @@
 Summary:	ZenLib C++ utility library
 Summary(pl.UTF-8):	ZenLib - biblioteka narzędziowa C++
 Name:		libzen
-Version:	0.4.37
+Version:	0.4.38
 Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://mediaarea.net/download/source/libzen/%{version}/%{name}_%{version}.tar.xz
-# Source0-md5:	c2538d08a8ba49790a7e0768d19693ff
+# Source0-md5:	5f3e5c4a8329f03a5000e1227a656198
 Patch0:		%{name}-include.patch
 URL:		https://github.com/MediaArea/ZenLib
 BuildRequires:	autoconf >= 2.50
@@ -99,6 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C Project/GNU/Library install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libzen.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -114,7 +117,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libzen.so
-%{_libdir}/libzen.la
 %{_includedir}/ZenLib
 %{_pkgconfigdir}/libzen.pc
 
