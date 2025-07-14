@@ -75,7 +75,7 @@ Dokumentacja API biblioteki ZenLib.
 %undos Source/ZenLib/*.h
 %undos *.txt Source/Doc/*.html
 chmod 644 *.txt Source/Doc/*.html
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 cd Project/GNU/Library
